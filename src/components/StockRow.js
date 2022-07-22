@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { stock } from '../resources/stock.js';
 
 class StockRow extends Component {
   constructor(props) {
@@ -8,25 +9,22 @@ class StockRow extends Component {
     };
   }
 
-  componentDidMount() {
-    // query the API
+  applyData(data) {
     this.setState({
-      data: {
-        price: 5,
-        date: '12-12-12',
-        time: '09:45',
-      },
+      data: data[data.length - 2],
     });
+  }
+
+  componentDidMount() {
+    stock.latestPrice(this.props.ticker, this.applyData.bind(this));
   }
 
   render() {
     return (
-      <tr>
-        <td>{this.props.ticker}</td>
-        <td>{this.state.data.price}</td>
-        <td>{this.state.data.date}</td>
-        <td>{this.state.data.time}</td>
-      </tr>
+      <li className='list-group-item'>
+        <strong>{this.props.ticker}</strong>${this.state.data.price}
+        <span>+12.34 (5.3%)</span>
+      </li>
     );
   }
 }
